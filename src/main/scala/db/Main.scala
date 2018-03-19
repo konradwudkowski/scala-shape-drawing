@@ -7,6 +7,8 @@ import scala.util.control.NonFatal
 object Main extends App {
   val scanner = new java.util.Scanner(System.in)
 
+  loop()
+
   def usage(): Unit = {
     def padded(s: String): String = s.padTo(15, " ").mkString
 
@@ -28,7 +30,7 @@ object Main extends App {
         loop(grid)
       } catch {
         case NonFatal(_) =>
-          println("Unable to apply command to current canvas")
+          println(red("Unable to apply command to current canvas"))
           loop(state)
       }
 
@@ -59,12 +61,13 @@ object Main extends App {
           }
       }
       .getOrElse {
-        println("Command unrecognized, please try again")
+        println(red("Command unrecognized, please try again"))
         usage()
         loop(state)
       }
 
   }
 
-  loop()
+  def red(s: String): String = Console.RED + s + Console.RESET
+
 }
