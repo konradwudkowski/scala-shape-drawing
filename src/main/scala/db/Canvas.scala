@@ -53,11 +53,8 @@ object Canvas {
     grid.map(_.mkString).mkString("\n")
 
   def addBorders(grid: Grid): Grid = {
-    val withVerticalBorders = grid.map { rows =>
-      "|" +: rows :+ "|"
-    }
-
-    val horizontalBorder = Vector.fill(grid.head.length + 2)("-")
+    val withVerticalBorders = grid.map(row => "|" +: row :+ "|")
+    val horizontalBorder    = Vector.fill(grid.head.length + 2)("-")
     horizontalBorder +: withVerticalBorders :+ horizontalBorder
   }
 

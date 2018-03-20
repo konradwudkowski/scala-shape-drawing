@@ -34,37 +34,51 @@ object Main extends App {
           loop(state)
       }
 
-    Command
-      .parse(scanner.nextLine())
-      .map {
-        case Quit =>
-          println("Bye!")
-          sys.exit()
+    UserCommand.parse(scanner.nextLine()) match {
 
-        case ReturnPressed =>
-          println
-          loop(state)
+      case Right(Quit) =>
+        println("Bye!")
+        sys.exit()
 
-        case CreateCanvas(width, height) =>
-          handle {
-            createGrid(width, height)
-          }
+      case Right(ReturnPressed) =>
+        println
+        loop(state)
 
-        case DrawLine(x1, y1, x2, y2) =>
-          handle {
-            drawLine(Point(x1, y1), Point(x2, y2))(state)
-          }
+      case Right(CreateCanvas(width, height)) =>
+        handle {
+          createGrid(width, height)
+        }
 
-        case DrawRectangle(x1, y1, x2, y2) =>
-          handle {
-            drawRectangle(Point(x1, y1), Point(x2, y2))(state)
-          }
-      }
-      .getOrElse {
+      case Right(DrawLine(x1, y1, x2, y2)) =>
+        handle {
+          drawLine(Point(x1, y1), Point(x2, y2))(state)
+        }
+
+      case Right(DrawRectangle(x1, y1, x2, y2)) =>
+        handle {
+          drawRectangle(Point(x1, y1), Point(x2, y2))(state)
+        }
+
+      case Left(EmptyCanvas) =>
+        println(red("Please create a non-empty canvas"))
+        usage()
+        loop(state)
+
+      case Left(InvalidLineCoordinates) =>
+        println(red("Line coordinates not valid to form a horizontal or vertical line"))
+        usage()
+        loop(state)
+
+      case Left(InvalidRectangleCoordinates) =>
+        println(red("Rectangle coordinates not valid, please make sure to put upper left point first"))
+        usage()
+        loop(state)
+
+      case Left(UnknownCommand) =>
         println(red("Command unrecognized, please try again"))
         usage()
         loop(state)
-      }
+    }
 
   }
 

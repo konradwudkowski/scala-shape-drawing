@@ -9,5 +9,10 @@ lazy val root = (project in file(".")).
     )),
     name := "drawing",
     trapExit := false,
-    libraryDependencies += scalaTest % Test
+    libraryDependencies ++= List(
+      cats,
+      scalaTest % Test
+    ),
+    scalacOptions ++= Seq("-feature", "-Xfatal-warnings", "-Ywarn-dead-code", "-Ywarn-unused:imports"),
+    scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
   )
